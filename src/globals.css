@@ -4,6 +4,10 @@
 @theme {
   --font-sans: 'DM Sans', sans-serif;
   --font-display: 'Space Grotesk', sans-serif;
+  --color-primary-500: #7695ec;
+  --color-primary-600: #5b7fe5;
+  --color-success-500: #47b960;
+  --color-danger-500: #ff5151;
   --color-brand-50: #fff6ed;
   --color-brand-100: #ffedd5;
   --color-brand-400: #fb923c;
@@ -41,6 +45,7 @@ body {
   min-width: 320px;
   min-height: 100svh;
   font-family: var(--font-sans);
+  color: var(--color-ink-950);
 }
 
 body::selection {
@@ -63,4 +68,8 @@ button:disabled {
 
 #root {
   min-height: 100svh;
+}
+
+textarea {
+  resize: vertical;
 }

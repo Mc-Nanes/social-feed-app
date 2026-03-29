@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, type ChangeEvent, type SyntheticEvent } from 'react'
 import { useAuth } from '../hooks/useAuth'
 
 export function SignupModal() {
@@ -15,7 +15,7 @@ export function SignupModal() {
   const normalizedUsername = username.trim()
   const isSubmitDisabled = normalizedUsername.length === 0 || isAuthenticating
 
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  function handleSubmit(event: SyntheticEvent<HTMLFormElement, SubmitEvent>) {
     event.preventDefault()
 
     if (isSubmitDisabled) {
@@ -25,7 +25,7 @@ export function SignupModal() {
     loginWithUsername(normalizedUsername)
   }
 
-  function handleUsernameChange(event: React.ChangeEvent<HTMLInputElement>) {
+  function handleUsernameChange(event: ChangeEvent<HTMLInputElement>) {
     setUsername(event.target.value)
 
     if (errorMessage) {
