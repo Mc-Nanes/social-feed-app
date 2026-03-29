@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { AuthProvider } from '../../features/auth/context/AuthContext'
+import { FakeInteractionsProvider } from '../../features/posts/context/FakeInteractionsContext'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -19,7 +20,9 @@ interface AppProvidersProps {
 export function AppProviders({ children }: AppProvidersProps) {
   return (
     <QueryClientProvider client={queryClient}>
-      <AuthProvider>{children}</AuthProvider>
+      <AuthProvider>
+        <FakeInteractionsProvider>{children}</FakeInteractionsProvider>
+      </AuthProvider>
     </QueryClientProvider>
   )
 }

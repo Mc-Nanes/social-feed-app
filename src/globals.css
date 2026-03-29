@@ -40,6 +40,28 @@ html {
   scroll-behavior: smooth;
 }
 
+@keyframes overlay-fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes modal-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
 body {
   margin: 0;
   min-width: 320px;
@@ -72,4 +94,12 @@ button:disabled {
 
 textarea {
   resize: vertical;
+}
+
+.animate-overlay-in {
+  animation: overlay-fade-in 180ms ease-out;
+}
+
+.animate-modal-in {
+  animation: modal-slide-up 220ms cubic-bezier(0.22, 1, 0.36, 1);
 }
