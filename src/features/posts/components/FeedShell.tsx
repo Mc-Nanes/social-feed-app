@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useAuth } from '../../auth/hooks/useAuth'
+import { usePosts } from '../hooks/usePosts'
 
 function getInitials(name: string) {
   return name
@@ -13,6 +14,16 @@ function getInitials(name: string) {
 export function FeedShell() {
   const { logout, session } = useAuth()
   const [isLoggingOut, setIsLoggingOut] = useState(false)
+  const {
+    errorMessage,
+    fetchNextPage,
+    hasNextPage,
+    isError,
+    isFetchingNextPage,
+    isLoading,
+    posts,
+    totalPosts,
+  } = usePosts()
 
   if (!session) {
     return null
@@ -184,36 +195,81 @@ export function FeedShell() {
                 Feed
               </p>
               <h2 className="mt-2 font-display text-3xl text-ink-950">
-                Timeline preview
+                Latest posts
               </h2>
             </div>
             <p className="max-w-lg text-sm leading-6 text-slate-600">
-              The authenticated shell is in place. The next iteration can plug
-              the real post composer and the API-backed feed into this layout.
+              Posts are loaded from the CodeLeap API through React Query with
+              pagination support and newest-first ordering.
             </p>
           </div>
 
-          <div className="mt-8 grid gap-4">
-            {[1, 2].map((item) => (
-              <article
-                className="rounded-[24px] border border-slate-200 bg-slate-50/80 p-5"
-                key={item}
-              >
-                <div className="flex items-center justify-between gap-4">
-                  <div>
-                    <div className="h-4 w-24 rounded-full bg-slate-200" />
-                    <div className="mt-3 h-3 w-40 rounded-full bg-slate-100" />
-                  </div>
-                  <div className="h-9 w-24 rounded-full bg-slate-200" />
-                </div>
-                <div className="mt-5 space-y-3">
-                  <div className="h-3 w-full rounded-full bg-slate-200" />
-                  <div className="h-3 w-11/12 rounded-full bg-slate-200" />
-                  <div className="h-3 w-8/12 rounded-full bg-slate-200" />
-                </div>
-              </article>
-            ))}
+          <div className="mt-6 flex items-center justify-between gap-4 rounded-2xl border border-slate-200 bg-slate-50/80 px-4 py-3 text-sm text-slate-600">
+            <span>{totalPosts} posts available</span>
+            <span>{posts.length} loaded in memory</span>
           </div>
+
+          {isLoading ? (
+            <div className="mt-8 rounded-[24px] border border-slate-200 bg-slate-50/80 p-5 text-sm text-slate-600">
+              Loading posts...
+            </div>
+          ) : null}
+
+          {isError ? (
+            <div className="mt-8 rounded-[24px] border border-rose-100 bg-rose-50 px-5 py-4 text-sm text-rose-700">
+              {errorMessage}
+            </div>
+          ) : null}
+
+          {!isLoading && !isError && posts.length === 0 ? (
+            <div className="mt-8 rounded-[24px] border border-slate-200 bg-slate-50/80 p-5 text-sm text-slate-600">
+              No posts yet. The API is connected and ready for the first publish.
+            </div>
+          ) : null}
+
+          {!isLoading && !isError && posts.length > 0 ? (
+            <div className="mt-8 grid gap-4">
+              {posts.map((post) => (
+                <article
+                  className="rounded-[24px] border border-slate-200 bg-slate-50/80 p-5"
+                  key={post.id}
+                >
+                  <div className="flex items-start justify-between gap-4">
+                    <div>
+                      <p className="text-lg font-semibold text-ink-950">
+                        {post.title}
+                      </p>
+                      <p className="mt-1 text-sm text-slate-500">
+                        @{post.username}
+                      </p>
+                    </div>
+                    <time
+                      className="text-xs font-medium uppercase tracking-[0.2em] text-slate-400"
+                      dateTime={post.created_datetime}
+                    >
+                      {new Date(post.created_datetime).toLocaleDateString()}
+                    </time>
+                  </div>
+                  <p className="mt-4 text-sm leading-6 text-slate-600">
+                    {post.content}
+                  </p>
+                </article>
+              ))}
+            </div>
+          ) : null}
+
+          {hasNextPage && !isLoading ? (
+            <div className="mt-6 flex justify-end">
+              <button
+                className="rounded-full border border-slate-200 bg-white px-5 py-2 text-sm font-semibold text-ink-900 transition hover:border-slate-300 hover:bg-slate-100"
+                disabled={isFetchingNextPage}
+                onClick={() => void fetchNextPage()}
+                type="button"
+              >
+                {isFetchingNextPage ? 'Loading more...' : 'Load more'}
+              </button>
+            </div>
+          ) : null}
         </section>
       </div>
     </main>
