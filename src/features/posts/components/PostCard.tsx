@@ -1,4 +1,6 @@
 import { useState, type SyntheticEvent } from 'react'
+import { FaRegEdit } from 'react-icons/fa'
+import { MdDeleteForever } from 'react-icons/md'
 import { useFakeInteractions } from '../hooks/useFakeInteractions'
 import type { Post } from '../types/post'
 import { formatRelativeTime } from '../lib/formatRelativeTime'
@@ -8,44 +10,6 @@ interface PostCardProps {
   currentUsername: string
   onDelete: (post: Post) => void
   onEdit: (post: Post) => void
-}
-
-function TrashIcon() {
-  return (
-    <svg
-      aria-hidden="true"
-      className="h-5 w-5"
-      fill="none"
-      viewBox="0 0 24 24"
-    >
-      <path
-        d="M3 6h18M8 6V4h8v2m-8 0 1 13h6l1-13m-6 3v7m4-7v7"
-        stroke="currentColor"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth="2"
-      />
-    </svg>
-  )
-}
-
-function EditIcon() {
-  return (
-    <svg
-      aria-hidden="true"
-      className="h-5 w-5"
-      fill="none"
-      viewBox="0 0 24 24"
-    >
-      <path
-        d="M4 20h4l10.5-10.5a2.121 2.121 0 1 0-3-3L5 17v3Zm9.5-12.5 3 3"
-        stroke="currentColor"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth="2"
-      />
-    </svg>
-  )
 }
 
 function HeartIcon({ isLiked }: { isLiked: boolean }) {
@@ -122,44 +86,44 @@ export function PostCard({
   }
 
   return (
-    <article className="overflow-hidden rounded-2xl border border-slate-200 bg-white">
-      <header className="flex items-start justify-between gap-4 bg-primary-500 px-5 py-5 text-white sm:px-6 sm:py-6">
-        <h3 className="max-w-[82%] text-xl font-bold leading-tight sm:max-w-[85%] sm:text-[22px]">
+    <article className="overflow-hidden rounded-2xl border border-[#999999] bg-white">
+      <header className="flex items-start justify-between gap-4 bg-primary-500 px-5 py-5 text-white sm:px-6 sm:py-5">
+        <h3 className="max-w-[82%] break-words text-[20px] font-bold leading-tight sm:max-w-[85%] sm:text-[22px]">
           {post.title}
         </h3>
 
         {canManagePost ? (
-          <div className="flex items-center gap-3 sm:gap-4">
+          <div className="flex items-center gap-3">
             <button
               aria-label="Delete post"
-              className="text-white/90 transition-colors duration-200 hover:text-white"
+              className="flex h-7 w-7 items-center justify-center text-white transition-colors duration-200 hover:text-slate-100"
               onClick={() => onDelete(post)}
               type="button"
             >
-              <TrashIcon />
+              <MdDeleteForever className="h-[22px] w-[22px]" />
             </button>
             <button
               aria-label="Edit post"
-              className="text-white/90 transition-colors duration-200 hover:text-white"
+              className="flex h-7 w-7 items-center justify-center text-white transition-colors duration-200 hover:text-slate-100"
               onClick={() => onEdit(post)}
               type="button"
             >
-              <EditIcon />
+              <FaRegEdit className="h-[22px] w-[22px]" />
             </button>
           </div>
         ) : null}
       </header>
 
-      <div className="space-y-4 px-5 py-5 sm:px-6 sm:py-6">
+      <div className="space-y-4 px-5 py-5 sm:px-6 sm:py-5">
         <div className="flex flex-col gap-2 text-sm sm:flex-row sm:items-center sm:justify-between sm:gap-4">
-          <p className="font-bold text-slate-700">@{post.username}</p>
+          <p className="font-bold text-slate-500">@{post.username}</p>
           <time className="text-slate-400" dateTime={post.created_datetime}>
             {formatRelativeTime(post.created_datetime)}
           </time>
         </div>
 
         {attachment ? (
-          <div className="overflow-hidden rounded-2xl border border-slate-200">
+          <div className="overflow-hidden rounded-2xl border border-[#999999]">
             <img
               alt={`Attachment for ${post.title}`}
               className="max-h-[360px] w-full object-cover"
@@ -168,18 +132,18 @@ export function PostCard({
           </div>
         ) : null}
 
-        <p className="whitespace-pre-wrap text-base leading-7 text-slate-700 sm:text-lg">
+        <p className="whitespace-pre-wrap break-words text-base leading-7 text-slate-800 sm:text-[18px] sm:leading-8">
           {post.content}
         </p>
       </div>
 
-      <footer className="border-t border-slate-100 px-5 py-4 sm:px-6">
+      <footer className="border-t border-slate-200 px-5 py-4 sm:px-6">
         <div className="flex flex-wrap items-center gap-3">
           <button
-            className={`inline-flex items-center gap-2 rounded-full px-3 py-2 text-sm font-semibold transition-colors duration-200 ${
+            className={`inline-flex items-center gap-2 rounded-lg px-0 py-1 text-sm font-semibold transition-colors duration-200 ${
               isLiked
-                ? 'bg-rose-50 text-rose-600 hover:bg-rose-100'
-                : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                ? 'text-rose-600 hover:text-rose-700'
+                : 'text-slate-500 hover:text-slate-700'
             }`}
             onClick={() => toggleLike(post.id, currentUsername)}
             type="button"
@@ -189,10 +153,10 @@ export function PostCard({
           </button>
 
           <button
-            className={`inline-flex items-center gap-2 rounded-full px-3 py-2 text-sm font-semibold transition-colors duration-200 ${
+            className={`inline-flex items-center gap-2 rounded-lg px-0 py-1 text-sm font-semibold transition-colors duration-200 ${
               isCommentsOpen
-                ? 'bg-primary-500/12 text-primary-600 hover:bg-primary-500/18'
-                : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                ? 'text-primary-600 hover:text-primary-700'
+                : 'text-slate-500 hover:text-slate-700'
             }`}
             onClick={() => setIsCommentsOpen((previousState) => !previousState)}
             type="button"
@@ -203,7 +167,7 @@ export function PostCard({
         </div>
 
         {isCommentsOpen ? (
-          <div className="mt-4 space-y-4 rounded-2xl border border-slate-200 bg-slate-50 p-4">
+          <div className="mt-4 space-y-4 rounded-2xl border border-[#999999] bg-white p-4">
             <div className="space-y-3">
               {comments.length === 0 ? (
                 <p className="text-sm text-slate-500">
@@ -212,7 +176,7 @@ export function PostCard({
               ) : (
                 comments.map((comment) => (
                   <article
-                    className="rounded-xl border border-slate-200 bg-white px-4 py-3"
+                    className="rounded-xl border border-black bg-white px-4 py-3"
                     key={comment.id}
                   >
                     <p className="text-sm font-semibold text-slate-700">
@@ -231,16 +195,16 @@ export function PostCard({
               onSubmit={handleCommentSubmit}
             >
               <input
-                className="h-11 flex-1 rounded-lg border border-slate-300 bg-white px-4 text-sm text-ink-950 outline-none transition-colors duration-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/15"
+                className="h-11 flex-1 rounded-lg border border-black bg-white px-4 text-sm text-ink-950 outline-none transition-colors duration-200 focus:border-primary-500"
                 onChange={(event) => setCommentDraft(event.target.value)}
                 placeholder="Write a comment"
                 value={commentDraft}
               />
               <button
-                className={`h-11 rounded-lg px-4 text-sm font-bold text-white transition-all duration-200 ${
+                className={`h-11 rounded-lg px-4 text-sm font-bold transition-all duration-200 sm:min-w-[110px] ${
                   commentDraft.trim().length === 0
-                    ? 'bg-slate-300 text-slate-600'
-                    : 'bg-primary-500 hover:bg-primary-600'
+                    ? 'bg-[#dddddd] text-white'
+                    : 'bg-primary-500 text-white hover:bg-primary-600'
                 }`}
                 disabled={commentDraft.trim().length === 0}
                 type="submit"

@@ -108,16 +108,16 @@ export function PostComposer({
   }
 
   return (
-    <section className="rounded-2xl border border-slate-200 bg-white p-6 sm:p-8">
-      <h2 className="font-display text-[22px] font-semibold text-ink-950">
+    <section className="rounded-2xl border border-[#999999] bg-white p-5 sm:p-6">
+      <h2 className="font-display text-[22px] font-bold text-ink-950">
         What&apos;s on your mind?
       </h2>
 
-      <form className="mt-6 space-y-6" onSubmit={onSubmit}>
+      <form className="mt-5 space-y-5" onSubmit={onSubmit}>
         <label className="block space-y-2">
           <span className="text-base font-normal text-ink-950">Title</span>
           <input
-            className="h-[44px] w-full rounded-lg border border-slate-300 px-4 text-sm text-ink-950 outline-none transition-colors duration-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/15"
+            className="h-[44px] w-full rounded-lg border border-[#777777] bg-white px-3 text-sm text-ink-950 outline-none transition-colors duration-200 placeholder:text-slate-300 focus:border-primary-500"
             onChange={(event) => onTitleChange(event.target.value)}
             placeholder="Hello world"
             value={title}
@@ -128,7 +128,7 @@ export function PostComposer({
           <span className="text-base font-normal text-ink-950">Content</span>
           <div className="relative">
             <textarea
-              className="min-h-[120px] w-full rounded-lg border border-slate-300 px-4 py-3 text-sm leading-6 text-ink-950 outline-none transition-colors duration-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/15"
+              className="min-h-[120px] w-full rounded-lg border border-[#777777] bg-white px-3 py-3 text-sm leading-6 text-ink-950 outline-none transition-colors duration-200 placeholder:text-slate-300 focus:border-primary-500"
               onChange={(event) => {
                 onContentChange(event.target.value)
                 setCaretPosition(event.target.selectionStart ?? event.target.value.length)
@@ -144,7 +144,7 @@ export function PostComposer({
             />
 
             {mentionSuggestions.length > 0 ? (
-              <div className="absolute left-0 top-[calc(100%+8px)] z-10 w-full max-w-[220px] rounded-xl border border-slate-200 bg-white p-2 shadow-soft">
+              <div className="absolute left-0 top-[calc(100%+8px)] z-10 w-full max-w-[220px] rounded-xl border border-[#999999] bg-white p-2 shadow-lg">
                 {mentionSuggestions.map((username) => (
                   <button
                     className="flex w-full items-center rounded-lg px-3 py-2 text-left text-sm font-medium text-slate-700 transition-colors duration-200 hover:bg-slate-100"
@@ -163,7 +163,7 @@ export function PostComposer({
         {attachmentPreview ? (
           <div className="space-y-3">
             <p className="text-sm font-medium text-slate-600">Attachment preview</p>
-            <div className="overflow-hidden rounded-2xl border border-slate-200">
+            <div className="overflow-hidden rounded-2xl border border-[#999999]">
               <img
                 alt="Selected attachment preview"
                 className="max-h-[260px] w-full object-cover"
@@ -180,7 +180,7 @@ export function PostComposer({
         ) : null}
 
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-center gap-3">
             <input
               accept="image/*"
               className="hidden"
@@ -189,7 +189,7 @@ export function PostComposer({
               type="file"
             />
             <button
-              className="inline-flex items-center gap-2 rounded-lg border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 transition-colors duration-200 hover:bg-slate-100"
+              className="inline-flex items-center gap-2 rounded-lg border border-[#777777] bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition-colors duration-200 hover:bg-slate-100"
               onClick={() => fileInputRef.current?.click()}
               type="button"
             >
@@ -199,7 +199,7 @@ export function PostComposer({
 
             {attachmentPreview ? (
               <button
-                className="rounded-lg border border-slate-300 px-3 py-2 text-sm font-medium text-slate-600 transition-colors duration-200 hover:bg-slate-100"
+                className="rounded-lg border border-[#777777] bg-white px-3 py-2 text-sm font-medium text-slate-600 transition-colors duration-200 hover:bg-slate-100"
                 onClick={() => onAttachmentChange(null)}
                 type="button"
               >
@@ -209,10 +209,10 @@ export function PostComposer({
           </div>
 
           <button
-            className={`h-8 min-w-[120px] rounded-lg px-6 text-sm font-bold text-white transition-all duration-200 ${
+            className={`h-10 min-w-[120px] self-stretch rounded-lg px-6 text-sm font-bold transition-all duration-200 sm:h-8 sm:self-end ${
               isDisabled
-                ? 'bg-slate-300 text-slate-600'
-                : 'bg-primary-500 hover:bg-primary-600'
+                ? 'bg-[#dddddd] text-white'
+                : 'bg-primary-500 text-white hover:bg-primary-600'
             }`}
             disabled={isDisabled}
             type="submit"

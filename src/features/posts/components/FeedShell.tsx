@@ -5,6 +5,7 @@ import {
   useState,
   type SyntheticEvent,
 } from 'react'
+import { FaSearch } from 'react-icons/fa'
 import { useAuth } from '../../auth/hooks/useAuth'
 import { useFakeInteractions } from '../hooks/useFakeInteractions'
 import type { Post } from '../types/post'
@@ -199,63 +200,43 @@ export function FeedShell() {
     }
   }
 
-  const sessionLabel =
-    session.mode === 'google' ? 'Google session active' : 'Username session'
-
   return (
     <>
-      <main className="min-h-screen bg-[#dddddd] px-3 py-3 sm:px-5 sm:py-6">
-        <div className="mx-auto w-full max-w-[800px] overflow-hidden rounded-[20px] border border-slate-200 bg-white sm:rounded-2xl">
-          <header className="bg-primary-500 px-4 py-5 sm:px-8 sm:py-7">
-            <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-              <div className="space-y-1 md:min-w-0">
-                <p className="text-xs font-bold uppercase tracking-[0.3em] text-white/75">
-                  {sessionLabel}
-                </p>
-                <h1 className="font-display text-[22px] font-bold text-white">
-                  CodeLeap Network
-                </h1>
-              </div>
+      <main className="min-h-screen bg-[#dddddd] px-0 py-0">
+        <div className="mx-auto min-h-screen w-full max-w-[800px] bg-white">
+          <header className="bg-primary-500 px-4 py-6 sm:px-8">
+            <div className="flex items-center justify-between gap-3">
+              <h1 className="min-w-0 font-display text-[22px] font-bold leading-tight text-white">
+                CodeLeap Network
+              </h1>
 
-              <div className="flex flex-col gap-3 sm:flex-row sm:items-center md:justify-end">
-                <label className="relative block min-w-0 sm:min-w-[220px]">
-                  <span className="sr-only">Search posts</span>
-                  <input
-                    className="h-10 w-full rounded-lg border border-white/25 bg-white/14 px-4 text-sm text-white outline-none placeholder:text-white/70 transition-colors duration-200 focus:border-white/65 focus:bg-white/18"
-                    onChange={(event) => setSearchQuery(event.target.value)}
-                    placeholder="Search by title or author"
-                    value={searchQuery}
-                  />
-                </label>
+              <div className="ml-3 flex shrink-0 items-center gap-2">
+                  {session.photoUrl ? (
+                    <img
+                      alt={session.username}
+                      className="h-9 w-9 shrink-0 rounded-full border border-white/40 object-cover"
+                      referrerPolicy="no-referrer"
+                      src={session.photoUrl}
+                    />
+                  ) : (
+                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-white/55 bg-white/15 text-sm font-bold text-white">
+                      {getInitials(session.username)}
+                    </div>
+                  )}
 
-                <div className="flex items-center gap-3 self-end sm:self-auto">
-                {session.photoUrl ? (
-                  <img
-                    alt={session.username}
-                    className="hidden h-10 w-10 rounded-full border border-white/40 object-cover sm:block"
-                    referrerPolicy="no-referrer"
-                    src={session.photoUrl}
-                  />
-                ) : (
-                  <div className="hidden h-10 w-10 items-center justify-center rounded-full border border-white/35 bg-white/15 text-sm font-bold text-white sm:flex">
-                    {getInitials(session.username)}
-                  </div>
-                )}
-
-                <button
-                  className="rounded-lg border border-white/45 bg-white px-4 py-2 text-sm font-bold text-primary-500 transition-colors duration-200 hover:bg-slate-100"
-                  disabled={isLoggingOut}
-                  onClick={() => void handleLogout()}
-                  type="button"
-                >
-                  {isLoggingOut ? 'Leaving...' : 'Logout'}
-                </button>
-                </div>
+                  <button
+                    className="h-9 shrink-0 rounded-lg border border-white bg-white px-4 text-sm font-bold text-primary-500 transition-colors duration-200 hover:bg-slate-100"
+                    disabled={isLoggingOut}
+                    onClick={() => void handleLogout()}
+                    type="button"
+                  >
+                    {isLoggingOut ? 'Leaving...' : 'Logout'}
+                  </button>
               </div>
             </div>
           </header>
 
-          <div className="space-y-5 bg-[#dddddd] p-4 sm:space-y-6 sm:p-8">
+          <div className="space-y-5 bg-white p-3 sm:space-y-6 sm:p-5">
             <PostComposer
               attachmentPreview={selectedAttachment}
               content={content}
@@ -269,19 +250,30 @@ export function FeedShell() {
             />
 
             <section className="space-y-5">
-              <div className="flex flex-col gap-2 rounded-2xl border border-slate-200 bg-white px-5 py-4 text-sm text-slate-500 sm:flex-row sm:items-center sm:justify-between">
+              <div className="flex justify-start">
+                <label className="relative block w-full sm:max-w-[320px]">
+                  <span className="sr-only">Search posts</span>
+                  <FaSearch className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+                  <input
+                    className="h-10 w-full rounded-lg border border-[#999999] bg-white pl-3 pr-10 text-sm text-slate-700 outline-none placeholder:text-slate-400 transition-colors duration-200 focus:border-primary-500"
+                    onChange={(event) => setSearchQuery(event.target.value)}
+                    placeholder="Search by title or author"
+                    value={searchQuery}
+                  />
+                </label>
+              </div>
+
+              <div className="flex flex-col gap-2 px-1 text-sm text-slate-500 sm:flex-row sm:items-center sm:justify-between">
                 <span>
                   {filteredPosts.length} of {posts.length} posts visible
                 </span>
-                <span>
-                  {normalizedSearchQuery
-                    ? `Filtering by "${deferredSearchQuery}"`
-                    : 'Newest posts appear first'}
-                </span>
+                {normalizedSearchQuery ? (
+                  <span className="break-words sm:text-right">{`Filtering by "${deferredSearchQuery}"`}</span>
+                ) : null}
               </div>
 
               {isLoading ? (
-                <div className="rounded-2xl border border-slate-200 bg-white px-6 py-5 text-sm text-slate-600">
+                <div className="rounded-2xl border border-[#999999] bg-white px-6 py-5 text-sm text-slate-600">
                   Loading posts...
                 </div>
               ) : null}
@@ -293,7 +285,7 @@ export function FeedShell() {
               ) : null}
 
               {!isLoading && !isError && posts.length === 0 ? (
-                <div className="rounded-2xl border border-slate-200 bg-white px-6 py-5 text-sm text-slate-600">
+                <div className="rounded-2xl border border-[#999999] bg-white px-6 py-5 text-sm text-slate-600">
                   No posts yet. Publish the first one from the composer above.
                 </div>
               ) : null}
@@ -302,7 +294,7 @@ export function FeedShell() {
               !isError &&
               posts.length > 0 &&
               filteredPosts.length === 0 ? (
-                <div className="rounded-2xl border border-slate-200 bg-white px-6 py-5 text-sm text-slate-600">
+                <div className="rounded-2xl border border-[#999999] bg-white px-6 py-5 text-sm text-slate-600">
                   No posts match your search right now.
                 </div>
               ) : null}
@@ -323,7 +315,7 @@ export function FeedShell() {
 
               {hasNextPage ? (
                 <div
-                  className="flex min-h-12 items-center justify-center rounded-2xl border border-dashed border-slate-300 bg-white px-4 py-3 text-sm text-slate-500"
+                  className="flex min-h-12 items-center justify-center rounded-2xl border border-dashed border-[#999999] bg-white px-4 py-3 text-sm text-slate-500"
                   ref={loadMoreTriggerRef}
                 >
                   {isFetchingNextPage
