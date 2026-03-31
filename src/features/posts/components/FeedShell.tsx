@@ -202,7 +202,7 @@ export function FeedShell() {
 
   return (
     <>
-      <main className="min-h-screen bg-[#dddddd] px-0 py-0">
+      <main className="min-h-screen bg-[var(--page-surface-gray)] px-0 py-0">
         <div className="mx-auto min-h-screen w-full max-w-[800px] bg-white">
           <header className="bg-primary-500 px-4 py-6 sm:px-8">
             <div className="flex items-center justify-between gap-3">

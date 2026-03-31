@@ -16,8 +16,9 @@
 }
 
 :root {
+  --page-surface-gray: #dddddd;
   color: var(--color-ink-950);
-  background: #dddddd;
+  background: var(--page-surface-gray);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
