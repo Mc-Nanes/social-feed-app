@@ -4,6 +4,21 @@ Este repositório contém a minha solução para o teste técnico de Frontend da
 
 O foco da implementação foi manter o fluxo principal fiel ao desafio, com código limpo, responsividade e uma experiência visual consistente.
 
+## Preview
+
+<table align="center">
+  <tr>
+    <td width="50%" valign="top">
+      <img src="docs/images/login-preview.png" alt="Tela de login da aplicação" width="100%" />
+      <br />
+      <img src="docs/images/composer-search-preview.png" alt="Composer de criação de post e campo de busca" width="100%" />
+    </td>
+    <td width="50%" valign="top">
+      <img src="docs/images/feed-post-preview.png" alt="Post com imagem, likes e comentários" width="100%" />
+    </td>
+  </tr>
+</table>
+
 ## Tecnologias Utilizadas
 
 - `React + Vite`: estrutura leve, rápida e adequada para uma SPA focada em interações de interface.
@@ -77,7 +92,7 @@ Quando um post real é deletado, os dados mockados associados a ele também são
 
 ```bash
 git clone <seu-link-do-github>
-cd social-feed-app
+cd codeleap-social
 ```
 
 2. Instale as dependências:
