@@ -1,73 +1,129 @@
-# React + TypeScript + Vite
+# CodeLeap Network - Frontend Assessment
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Este repositório contém a minha solução para o teste técnico de Frontend da CodeLeap. A aplicação simula uma rede social simples com CRUD de posts, autenticação local e uma camada extra de interações mockadas para cobrir os bônus de UI/UX.
 
-Currently, two official plugins are available:
+O foco da implementação foi manter o fluxo principal fiel ao desafio, com código limpo, responsividade e uma experiência visual consistente.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Tecnologias Utilizadas
 
-## React Compiler
+- `React + Vite`: estrutura leve, rápida e adequada para uma SPA focada em interações de interface.
+- `TypeScript`: tipagem das entidades, payloads, contexto global e hooks.
+- `Tailwind CSS`: estilização utilitária com ajustes responsivos e fidelidade visual ao layout proposto.
+- `@tanstack/react-query`: cache, sincronização e invalidação automática do estado vindo da API.
+- `Axios`: cliente HTTP centralizado para a integração com a API real.
+- `Firebase Auth`: opcional, utilizado como bônus para login com Google.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Arquitetura e Decisões Técnicas
 
-## Expanding the ESLint configuration
+- `Auth gate simples`: se não houver sessão salva, a aplicação exibe a tela de login; se houver sessão, renderiza o feed.
+- `Sessão persistida no localStorage`: o fluxo principal do desafio usa username local; o login pelo Google reaproveita a mesma estrutura de sessão.
+- `Server state com React Query`: leitura da timeline e mutações do CRUD conectadas à API da CodeLeap com invalidação de cache.
+- `Client state mockado`: likes, comentários, menções e anexos são persistidos localmente via Context API + `localStorage`.
+- `Camadas separadas`: API, hooks, contextos, tipos e componentes foram organizados por feature para facilitar manutenção.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Integração com a API Real
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+Base URL utilizada:
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```txt
+https://dev.codeleap.co.uk/careers/
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+O CRUD real cobre:
+- listar posts
+- criar posts
+- editar posts
+- deletar posts
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Features Implementadas
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### Core
+
+- login local com username persistido
+- feed com posts mais recentes no topo
+- criação de post com validação de campos obrigatórios
+- edição e exclusão apenas para posts do usuário logado
+- modais de edição e exclusão
+- loading, empty state e error state
+
+### Bônus
+
+- login com Google via Firebase Auth, quando configurado
+- infinite scroll com `IntersectionObserver`
+- filtro local por título ou autor
+- animações suaves em modais e estados de hover
+- favicon customizado
+
+### Camada Mockada
+
+Algumas funcionalidades não existem na API real, então foram implementadas no front-end com persistência local:
+
+- likes
+- comentários
+- menções em posts e comentários
+- anexos de imagem vinculados ao `post.id`
+
+Esses dados são armazenados localmente na chave:
+
+```txt
+codeleap_fake_interactions
 ```
+
+Quando um post real é deletado, os dados mockados associados a ele também são removidos.
+
+## Como Executar o Projeto
+
+1. Clone o repositório:
+
+```bash
+git clone <seu-link-do-github>
+cd social-feed-app
+```
+
+2. Instale as dependências:
+
+```bash
+npm install
+```
+
+3. Inicie o ambiente de desenvolvimento:
+
+```bash
+npm run dev
+```
+
+4. Para gerar a build de produção:
+
+```bash
+npm run build
+```
+
+## Variáveis de Ambiente
+
+O login com Google é opcional. Para habilitar, crie um arquivo `.env` com base em [`.env.example`](.env.example):
+
+```env
+VITE_FIREBASE_API_KEY=
+VITE_FIREBASE_AUTH_DOMAIN=
+VITE_FIREBASE_PROJECT_ID=
+VITE_FIREBASE_APP_ID=
+VITE_FIREBASE_STORAGE_BUCKET=
+VITE_FIREBASE_MESSAGING_SENDER_ID=
+```
+
+Se essas variáveis não estiverem preenchidas:
+- a aplicação continua funcionando normalmente com login por username
+- o card de login com Google não é exibido
+
+## Firebase Auth (Google)
+
+Para testar o login com Google:
+
+1. Crie um projeto no Firebase
+2. Registre um app Web dentro do projeto
+3. Ative `Authentication > Sign-in method > Google`
+4. Cadastre os domínios autorizados
+5. Copie as credenciais do app web para o `.env`
+
+
+**Observação:** em ambiente publicado, lembre-se de adicionar o domínio da aplicação à lista de domínios autorizados do Firebase.
