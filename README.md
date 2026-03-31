@@ -4,6 +4,10 @@ Este repositório contém a minha solução para o teste técnico de Frontend da
 
 O foco da implementação foi manter o fluxo principal fiel ao desafio, com código limpo, responsividade e uma experiência visual consistente.
 
+## Deploy
+
+- Aplicação publicada: https://codeleap-social-networl.vercel.app
+
 ## Preview
 
 <table align="center">
